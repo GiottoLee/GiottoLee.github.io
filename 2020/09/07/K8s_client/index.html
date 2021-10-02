@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="K8s：调用Java接口创建容器ExtractKubernetes是一个开源的，用于管理云平台中多个主机上的容器化的应用，Kubernetes的目标是让部署容器化的应用简单并且高效（powerful）, Kubernetes提供了应用部署，规划，更新，维护的一种机制。 控制台kubectl命令可以帮助我们操作K8s部署Deployment、pod、Service等，但当遇到批量部署的情况，以及实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2020/09/07/K8s_client/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="K8s：调用Java接口创建容器ExtractKubernetes是一个开源的，用于管理云平台中多个主机上的容器化的应用，Kubernetes的目标是让部署容器化的应用简单并且高效（powerful）, Kubernetes提供了应用部署，规划，更新，维护的一种机制。 控制台kubectl命令可以帮助我们操作K8s部署Deployment、pod、Service等，但当遇到批量部署的情况，以及实现">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-07T09:15:29.000Z">
+<meta property="article:modified_time" content="2020-09-08T07:50:14.579Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-K8s_client" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/09/07/K8s_client/" class="article-date">
+  <time class="dt-published" datetime="2020-09-07T09:15:29.000Z" itemprop="datePublished">2020-09-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="K8s：调用Java接口创建容器"><a href="#K8s：调用Java接口创建容器" class="headerlink" title="K8s：调用Java接口创建容器"></a>K8s：调用Java接口创建容器</h1><h2 id="Extract"><a href="#Extract" class="headerlink" title="Extract"></a>Extract</h2><p><a target="_blank" rel="noopener" href="https://www.kubernetes.org.cn/"><strong>Kubernetes</strong></a>是一个开源的，用于管理云平台中多个主机上的容器化的应用，Kubernetes的目标是让部署容器化的应用简单并且高效（powerful）, Kubernetes提供了应用部署，规划，更新，维护的一种机制。</p>
+<p>控制台<code>kubectl</code>命令可以帮助我们操作K8s部署Deployment、pod、Service等，但当遇到批量部署的情况，以及实现自动化云端服务的时候，如何在后端调用接口则显得尤为重要。</p>
+<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><p>引入Maven依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.kubernetes<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>client-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.kubernetes<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>client-java-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h2><p>![image-20200907210934572](/Users/giotto/Library/Mobile Documents/27N4MQEA55<del>pro</del>writer/Documents/K8s_client/image-20200907210934572.png)</p>
+<p>根据官方更新日志，<code>9.0.0+</code> 版本以上更新了<code>GenericKubernetesApi</code>，但是经过我的使用发现，该接口在创建容器失败后，没有合适的对象封装异常，我们无法得知容器创建失败的原因，经过在github询问贡献者得知：</p>
+<p>![image-20200907211507320](/Users/giotto/Library/Mobile Documents/27N4MQEA55<del>pro</del>writer/Documents/K8s_client/image-20200907211507320.png)</p>
+<p>根据现有版本的设计，需要使用<code>V1Status</code>接收返回的对象排查错误。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">      Call call = callBuilder.build();</span><br><span class="line">      call = tweakCallForCoreV1Group(call);</span><br><span class="line">      JsonElement element = apiClient.&lt;JsonElement&gt;execute(call, JsonElement.class).getData();</span><br><span class="line">      <span class="keyword">return</span> getKubernetesApiResponse(dataClass, element, apiClient.getJSON().getGson());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ApiException e) &#123;</span><br><span class="line">      <span class="keyword">if</span> (e.getCause() <span class="keyword">instanceof</span> IOException) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(e.getCause()); <span class="comment">// make this a checked exception?</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">final</span> V1Status status;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        status = apiClient.getJSON().deserialize(e.getResponseBody(), V1Status.class);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (JsonSyntaxException jsonEx) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(jsonEx);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">null</span> == status) &#123; <span class="comment">// the response body can be something unexpected sometimes..</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> KubernetesApiResponse&lt;&gt;(status, e.getCode());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下出于使用方便考虑，依旧采用旧版本的接口调用K8s。</p>
+<p>通过K8s接口创建容器大致分三步：</p>
+<blockquote>
+<pre><code>1. 创建与K8s api-server的连接；
+ 2. 构造容器接口；
+ 3. 构造容器对象；
+ 4. 调用容器接口创建容器。
+</code></pre>
+</blockquote>
+<h3 id="创建Deployment"><a href="#创建Deployment" class="headerlink" title="创建Deployment"></a>创建Deployment</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">   ApiClient apiClient = <span class="keyword">new</span> ApiClient();</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置K8s ApiServer地址</span></span><br><span class="line">   apiClient.setBasePath(<span class="string">&quot;http://localhost:8080&quot;</span>);</span><br><span class="line">   Configuration.setDefaultApiClient(<span class="keyword">this</span>.apiClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置Deployment接口</span></span><br><span class="line">   <span class="keyword">private</span> AppsV1Api appsV1Api;</span><br><span class="line">   appsV1Api = <span class="keyword">new</span> AppsV1Api(<span class="keyword">this</span>.apiClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置标签</span></span><br><span class="line">   Map&lt;String, String&gt; matchLabels = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">   matchLabels.put(<span class="string">&quot;app&quot;</span>, podName);</span><br><span class="line">   matchLabels.put(<span class="string">&quot;env&quot;</span>, env);</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置端口</span></span><br><span class="line">   List&lt;V1ContainerPort&gt; portList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">   V1ContainerPort port = <span class="keyword">new</span> V1ContainerPort();</span><br><span class="line">   port.setName(<span class="string">&quot;httpd&quot;</span>);</span><br><span class="line">   port.setContainerPort(<span class="number">80</span>);</span><br><span class="line">   portList.add(port);</span><br><span class="line"></span><br><span class="line">   List&lt;V1EnvVar&gt; envs = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">   V1EnvVar clientIdEnv = <span class="keyword">new</span> V1EnvVar();</span><br><span class="line">   clientIdEnv.setName(<span class="string">&quot;client_id&quot;</span>);</span><br><span class="line">   clientIdEnv.setValue(clientId);</span><br><span class="line">   envs.add(clientIdEnv);</span><br><span class="line">   V1EnvVar clientSecretEnv = <span class="keyword">new</span> V1EnvVar();</span><br><span class="line">   clientSecretEnv.setName(<span class="string">&quot;client_secret&quot;</span>);</span><br><span class="line">   clientSecretEnv.setValue(clientSecret);</span><br><span class="line">   envs.add(clientSecretEnv);</span><br><span class="line">   V1EnvVar redirectEnv = <span class="keyword">new</span> V1EnvVar();</span><br><span class="line">   redirectEnv.setName(<span class="string">&quot;redirect_uri&quot;</span>);</span><br><span class="line">   redirectEnv.setValue(redirectUri);</span><br><span class="line">   envs.add(redirectEnv);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用对象封装Deployment</span></span><br><span class="line">   V1Deployment deploy =</span><br><span class="line">       <span class="keyword">new</span> V1DeploymentBuilder()</span><br><span class="line">           .withApiVersion(<span class="string">&quot;apps/v1&quot;</span>)</span><br><span class="line">           .withKind(<span class="string">&quot;Deployment&quot;</span>)</span><br><span class="line">           .withNewMetadata()</span><br><span class="line">           .withName(deploymentName)</span><br><span class="line">           .withNamespace(<span class="string">&quot;default&quot;</span>)</span><br><span class="line">           .endMetadata()</span><br><span class="line">           .withNewSpec()</span><br><span class="line">           .withReplicas(<span class="number">1</span>)</span><br><span class="line">           .withNewSelector()</span><br><span class="line">           .withMatchLabels(matchLabels)</span><br><span class="line">           .endSelector()</span><br><span class="line">           .withNewTemplate()</span><br><span class="line">           .withNewMetadata()</span><br><span class="line">           .withLabels(matchLabels)</span><br><span class="line">           .endMetadata()</span><br><span class="line">           .withNewSpec()</span><br><span class="line">           .withContainers(</span><br><span class="line">               <span class="keyword">new</span> V1Container()</span><br><span class="line">                   .name(podName)</span><br><span class="line">                   .image(<span class="string">&quot;cgwire&quot;</span>)</span><br><span class="line">                   .imagePullPolicy(<span class="string">&quot;Never&quot;</span>)</span><br><span class="line">                   .ports(portList)</span><br><span class="line">                   .env(envs))</span><br><span class="line">           .endSpec()</span><br><span class="line">           .endTemplate()</span><br><span class="line">           .endSpec().build();</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               <span class="comment">//调用容器接口创建Deployment</span></span><br><span class="line">               appsV1Api.createNamespacedDeployment(</span><br><span class="line">                   <span class="string">&quot;default&quot;</span>,	<span class="comment">//namespace</span></span><br><span class="line">                   deploy,		<span class="comment">//Deployment对象</span></span><br><span class="line">                   <span class="string">&quot;true&quot;</span>,		<span class="comment">//pretty</span></span><br><span class="line">                   <span class="keyword">null</span>,		<span class="comment">//dryRun</span></span><br><span class="line">                   <span class="keyword">null</span>);		<span class="comment">//fieldManager               </span></span><br><span class="line">         &#125; <span class="keyword">catch</span> (ApiException e) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> FastRuntimeException(BizCode.SERVICE_UNAVAILABLE.getCode(),e.getResponseBody());</span><br><span class="line">         &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建Service"><a href="#创建Service" class="headerlink" title="创建Service"></a>创建Service</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">   ApiClient apiClient = <span class="keyword">new</span> ApiClient();</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置K8s ApiServer地址</span></span><br><span class="line">   apiClient.setBasePath(<span class="string">&quot;http://localhost:8080&quot;</span>);</span><br><span class="line">   Configuration.setDefaultApiClient(<span class="keyword">this</span>.apiClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置Service接口</span></span><br><span class="line">CoreV1Api coreV1Api = <span class="keyword">new</span> CoreV1Api(apiClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造Service对象</span></span><br><span class="line">	Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">   map.put(<span class="string">&quot;app&quot;</span>, podName);</span><br><span class="line">   map.put(<span class="string">&quot;env&quot;</span>, env);</span><br><span class="line">   V1Service svc =</span><br><span class="line">       <span class="keyword">new</span> V1ServiceBuilder()</span><br><span class="line">           .withApiVersion(<span class="string">&quot;v1&quot;</span>)</span><br><span class="line">           .withKind(<span class="string">&quot;Service&quot;</span>)</span><br><span class="line">           .withNewMetadata()</span><br><span class="line">           .withName(serviceName)</span><br><span class="line">           .withNamespace(<span class="string">&quot;default&quot;</span>)</span><br><span class="line">           .endMetadata()</span><br><span class="line">           .withNewSpec()</span><br><span class="line">           .withSelector(map)</span><br><span class="line">           .addNewPort()</span><br><span class="line">           .withName(<span class="string">&quot;http&quot;</span>)</span><br><span class="line">           .withPort(<span class="number">80</span>)</span><br><span class="line">           .withTargetPort(<span class="keyword">new</span> IntOrString(<span class="number">80</span>))</span><br><span class="line">           .endPort()</span><br><span class="line">           .endSpec()</span><br><span class="line">           .build();</span><br><span class="line"></span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">       <span class="comment">//调用接口操作K8s创建Service</span></span><br><span class="line">         coreV1Api.createNamespacedService(</span><br><span class="line">             svc.getMetadata().getNamespace(),	<span class="comment">//namespace</span></span><br><span class="line">             svc,								<span class="comment">//Service对象</span></span><br><span class="line">             <span class="string">&quot;true&quot;</span>,							<span class="comment">//pretty</span></span><br><span class="line">             <span class="keyword">null</span>,								<span class="comment">//dryRun</span></span><br><span class="line">             <span class="keyword">null</span>								<span class="comment">//fieldManager</span></span><br><span class="line">         );</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (ApiException e) &#123;</span><br><span class="line">     <span class="keyword">throw</span> <span class="keyword">new</span> FastRuntimeException(BizCode.SERVICE_UNAVAILABLE.getCode(),e.getResponseBody());</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建Ingress"><a href="#创建Ingress" class="headerlink" title="创建Ingress"></a>创建Ingress</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">   ApiClient apiClient = <span class="keyword">new</span> ApiClient();</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置K8s ApiServer地址</span></span><br><span class="line">   apiClient.setBasePath(<span class="string">&quot;http://localhost:8080&quot;</span>);</span><br><span class="line">   Configuration.setDefaultApiClient(<span class="keyword">this</span>.apiClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置Ingress接口</span></span><br><span class="line">ExtensionV1beta1Api extensionsV1beta1Api = <span class="keyword">new</span> ExtensionsV1beta1Api(<span class="keyword">this</span>.apiClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造Ingress对象</span></span><br><span class="line">Map&lt;String, String&gt; annotations = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">   annotations.put(<span class="string">&quot;kubernetes.io/ingress.class&quot;</span>, <span class="string">&quot;nginx&quot;</span>);</span><br><span class="line"></span><br><span class="line">   List&lt;ExtensionsV1beta1HTTPIngressPath&gt; ingressPaths = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">   ExtensionsV1beta1HTTPIngressPath path =</span><br><span class="line">       <span class="keyword">new</span> ExtensionsV1beta1HTTPIngressPath()</span><br><span class="line">           .path(<span class="string">&quot;/&quot;</span>)</span><br><span class="line">           .backend(</span><br><span class="line">               <span class="keyword">new</span> ExtensionsV1beta1IngressBackend()</span><br><span class="line">                   .serviceName(serviceName)</span><br><span class="line">                   .servicePort(<span class="keyword">new</span> IntOrString(<span class="number">80</span>)));</span><br><span class="line">   ingressPaths.add(path);</span><br><span class="line"></span><br><span class="line">   ExtensionsV1beta1Ingress ingress =</span><br><span class="line">       <span class="keyword">new</span> ExtensionsV1beta1IngressBuilder()</span><br><span class="line">           .withApiVersion(<span class="string">&quot;extensions/v1beta1&quot;</span>)</span><br><span class="line">           .withKind(<span class="string">&quot;Ingress&quot;</span>)</span><br><span class="line">           .withNewMetadata()</span><br><span class="line">           .withName(<span class="string">&quot;ingress-&quot;</span> + subDomain)</span><br><span class="line">           .withNamespace(<span class="string">&quot;default&quot;</span>)</span><br><span class="line">           .withAnnotations(annotations)</span><br><span class="line">           .endMetadata()</span><br><span class="line">           .withNewSpec()</span><br><span class="line">           .withRules(</span><br><span class="line">               <span class="keyword">new</span> ExtensionsV1beta1IngressRule()</span><br><span class="line">                   .host(subDomain+<span class="string">&quot;.cgclass.net&quot;</span>)</span><br><span class="line">                   .http(</span><br><span class="line">                       <span class="keyword">new</span> ExtensionsV1beta1HTTPIngressRuleValue()</span><br><span class="line">                           .paths(ingressPaths)))</span><br><span class="line">           .endSpec()</span><br><span class="line">           .build();</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">       <span class="comment">//调用容器接口创建Ingress</span></span><br><span class="line">     	extensionsV1beta1Api.createNamespacedIngress(</span><br><span class="line">         ingress.getMetadata().getNamespace(),	<span class="comment">//namespace</span></span><br><span class="line">         ingress,								<span class="comment">//Ingress对象</span></span><br><span class="line">         <span class="string">&quot;true&quot;</span>,								<span class="comment">//pretty</span></span><br><span class="line">         <span class="keyword">null</span>,									<span class="comment">//dryRun</span></span><br><span class="line">         <span class="keyword">null</span>									<span class="comment">//fieldManager</span></span><br><span class="line">     );</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (ApiException e) &#123;</span><br><span class="line">     <span class="keyword">throw</span> <span class="keyword">new</span> FastRuntimeException(BizCode.SERVICE_UNAVAILABLE.getCode(),e.getResponseBody());</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>该版本的容器接口会抛出封装好的异常对象<code>ApiException</code>，通过捕获<code>ApiException</code>我们可以找到容器创建失败的原因：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  extensionsV1beta1Api.createNamespacedIngress(</span><br><span class="line">      ingress.getMetadata().getNamespace(),</span><br><span class="line">      ingress,</span><br><span class="line">      <span class="string">&quot;true&quot;</span>,</span><br><span class="line">      <span class="keyword">null</span>,</span><br><span class="line">      <span class="keyword">null</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (ApiException e) &#123;</span><br><span class="line">  System.out.println(e.getCause());</span><br><span class="line">  System.out.println(e.getMessage());</span><br><span class="line">  System.out.println(e.getResponseBody());</span><br><span class="line">  System.out.println(e.getStackTrace());</span><br><span class="line">  System.out.println(e.getCode());</span><br><span class="line">  System.out.println(e.getResponseHeaders());</span><br><span class="line">  System.out.println(e.getLocalizedMessage());</span><br><span class="line">  System.out.println(e.getSuppressed());</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> FastRuntimeException(BizCode.SERVICE_UNAVAILABLE.getCode(),e.getResponseBody());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>创建容器的流程看似复杂，但是思路十分清晰，先通过<code>ApiClient</code>创建与K8s的连接，然后初始化与该容器相匹配的容器接口，如<code>AppsV1Api</code> , <code>CoreV1Api</code> 或<code>ExtensionsV1beta1Api</code> ，将容器信息封装到对象<code>V1Deployment</code> , <code>V1Service</code> , <code>ExtensionsV1beta1Ingress</code> 中，最后调用容器接口创建容器并处理异常信息。</p>
+<p><code>kubernetes-client/java</code> 目前网上教程内容较少并且质量堪忧（CSDN最近复制粘贴风气堪忧），只能借助于官方文档与实例，所以我将我的理解分享给大家，如有更好的解决方案，也欢迎大家与我交流。</p>
+<p><strong>Talk is cheap, show me the code.</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/09/07/K8s_client/" data-id="ckua4s48o0010qfgtfbb77eqc" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/10/01/LogMonitor/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/06/Springcloud_zipkin/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apollo/" rel="tag">Apollo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Compose/" rel="tag">Compose</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eureka/" rel="tag">Eureka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hbase/" rel="tag">Hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Help/" rel="tag">Help</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Cloud/" rel="tag">Spring Cloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" rel="tag">上位机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/" rel="tag">分布式配置中心</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" rel="tag">嵌入式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" rel="tag">年度总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E5%BD%95/" rel="tag">摘录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E9%98%85/" rel="tag">摘阅</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" rel="tag">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/" rel="tag">远程仓库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Apollo/" style="font-size: 10px;">Apollo</a> <a href="/tags/Compose/" style="font-size: 10px;">Compose</a> <a href="/tags/Docker/" style="font-size: 16px;">Docker</a> <a href="/tags/Eureka/" style="font-size: 10px;">Eureka</a> <a href="/tags/Gitlab/" style="font-size: 12px;">Gitlab</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 10px;">Hbase</a> <a href="/tags/Help/" style="font-size: 20px;">Help</a> <a href="/tags/Kubernetes/" style="font-size: 12px;">Kubernetes</a> <a href="/tags/MongoDB/" style="font-size: 10px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 12px;">NoSQL</a> <a href="/tags/Qt/" style="font-size: 14px;">Qt</a> <a href="/tags/Spring-Cloud/" style="font-size: 12px;">Spring Cloud</a> <a href="/tags/Wordpress/" style="font-size: 10px;">Wordpress</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/%E4%B8%8A%E4%BD%8D%E6%9C%BA/" style="font-size: 14px;">上位机</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83/" style="font-size: 10px;">分布式配置中心</a> <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" style="font-size: 14px;">嵌入式</a> <a href="/tags/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" style="font-size: 14px;">年度总结</a> <a href="/tags/%E6%91%98%E5%BD%95/" style="font-size: 10px;">摘录</a> <a href="/tags/%E6%91%98%E9%98%85/" style="font-size: 12px;">摘阅</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 10px;">版本控制</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/" style="font-size: 10px;">远程仓库</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 18px;">随笔</a> <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 10px;">高可用</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/03/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/09/toYMJ/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/31/2020Report/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/17/vuex_DOC/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/01/LogMonitor/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
