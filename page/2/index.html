@@ -71,59 +71,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-ghost-valine" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2019/11/05/ghost-valine/" class="article-date">
-  <time class="dt-published" datetime="2019-11-05T10:44:37.000Z" itemprop="datePublished">2019-11-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Valine-Leancloud搭建评论模块"><a href="#Valine-Leancloud搭建评论模块" class="headerlink" title="Valine+Leancloud搭建评论模块"></a>Valine+Leancloud搭建评论模块</h1><h2 id="Extract"><a href="#Extract" class="headerlink" title="Extract"></a>Extract</h2><p>Valine 诞生于2017年8月7日，是一款基于LeanCloud的快速、简洁且高效的无后端评论系统。</p>
-<p>理论上支持但不限于静态博客，目前已有Hexo、Jekyll、Typecho、Hugo、Ghost 等博客程序在使用Valine。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前国内Blog评论系统大多采用Gitment、网易云跟帖、多说、畅言等，目前网易云跟帖和多说已经凉凉，Gitment游客评论必须需要登录Github账户，使用畅言需要备案。这时候我将目光转向了Valine这个极简的轻量化无后台评论系统。</p>
-<p>Valine无后端，对于站长少了维护的一环，减少了不少工作量；对于游客，可匿名评论，减少了注册的步骤，对于小型Blog来说，这是一个十分优秀的评论系统。</p>
-<h2 id="注册Leancloud"><a href="#注册Leancloud" class="headerlink" title="注册Leancloud"></a>注册Leancloud</h2><p>Valine依托于Leancloud，所以首先我们需要到<a target="_blank" rel="noopener" href="https://leancloud.cn/">官网</a>注册一个用户。</p>
-<p>登录控制台，创建一个应用，并命名。<br><img src="ghost-valine/create-application.png" alt="create-application"></p>
-<p>在<code>存储-&gt;结构化数据</code>创建一个class并命名为<code>comment</code>。</p>
-<p>在<code>设置-&gt;应用Keys</code>可以看到自动生成的<code>AppID</code>和<code>AppKey</code>,这在之后会用到。</p>
-<h2 id="修改Ghost后台"><a href="#修改Ghost后台" class="headerlink" title="修改Ghost后台"></a>修改Ghost后台</h2><p>首先需要在Ghost后台<code>Code injections -&gt; Site Header</code>添加两行代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">“//cdn1.lncld.net/static/is/3.0.4/as-min.js”</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">‘//unpkg.com/valine/dist/Valine.min.js’</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>然后通过Xshell或者任何ssh工具连接到你的服务器，进入到你的主题目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入主题目录</span></span><br><span class="line"><span class="built_in">cd</span> /var/www/ghost/content/theme/&lt;Your theme&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改post.hbs</span></span><br><span class="line">sudo vi post.hbs</span><br></pre></td></tr></table></figure>
-
-<p>在文件中插入以下代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">              &#123;&#123;/foreach&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Valine --&gt;</span></span><br><span class="line"></span><br><span class="line">#插入以下内容</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;comment&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Leancloud--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;//cdn1.lncld.net/static/js/3.0.4/av-min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--Valine--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&#x27;//unpkg.com/valine/dist/Valine.min.js&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cat.net/ajax/libs/jquery/3.2.1/jquery.min.js&quot;</span>&gt;</span> <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">new</span> Valine(&#123;</span></span><br><span class="line"><span class="javascript">        </span></span><br><span class="line"><span class="javascript">            <span class="attr">av</span>: AV, </span></span><br><span class="line"><span class="javascript">            <span class="attr">el</span>: <span class="string">&#x27;.comment&#x27;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">app_id</span>: <span class="string">&#x27;&lt;AppID&gt;&#x27;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">app_key</span>: <span class="string">&#x27;&lt;AppKey&gt;&#x27;</span>,</span></span><br><span class="line"><span class="javascript">            <span class="attr">placeholder</span>: <span class="string">&#x27;say something&#x27;</span>,</span></span><br><span class="line"><span class="javascript">        &#125;);</span></span><br><span class="line"><span class="javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>在ghost文件夹下执行<code>ghost restart</code>重启Ghost即可。</p>
-<p><img src="ghost-valine/ghost-valine.png" alt="ghost-valine"></p>
-<h2 id="添加评论提醒"><a href="#添加评论提醒" class="headerlink" title="添加评论提醒"></a>添加评论提醒</h2><p>由于Valine无后端的特性，游客在Blog中评论，作为博主无从得知，所以我们添加评论通知的功能。</p>
-<p>评论通知使用了<a target="_blank" rel="noopener" href="https://github.com/DesertsP/Valine-Admin">Valine-admin</a></p>
-<p>官方给出的文档十分详细，按照给出的步骤部署即可。</p>
-<p>测试结果如下：<br><img src="ghost-valine/newComment.png" alt="newComment"></p>
-<p>至此，作为Blog的基本功能评论功能已基本实现。</p>
-<p>毕竟， 没有交互，谈什么分享。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2019/11/05/ghost-valine/" data-id="ckua5s6lr001es9gtbj4naxej" data-title="" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
     <article id="post-ghost-deploy" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2019/11/05/ghost-deploy/" class="article-date">
@@ -241,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/11/05/ghost-deploy/" data-id="ckua5s6lr001ds9gth00v78jm" data-title="" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/11/05/ghost-deploy/" data-id="ckuao3eve001dilgt1qql3x8a" data-title="" class="article-share-link">Share</a>
       
       
       
@@ -284,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/11/01/Dairy_2019_9_25/" data-id="ckua5s6le000cs9gtdr0cbsqy" data-title="随笔：《向死而生》---我修的死亡学分" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/11/01/Dairy_2019_9_25/" data-id="ckuao3ev1000cilgt4shr469i" data-title="随笔：《向死而生》---我修的死亡学分" class="article-share-link">Share</a>
       
       
       
@@ -403,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/10/31/wordpress-deploy/" data-id="ckua5s6m50037s9gtbz516ipp" data-title="Blog从Hexo迁移至Wordpress" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/10/31/wordpress-deploy/" data-id="ckuao3evt0036ilgtfg619ben" data-title="Blog从Hexo迁移至Wordpress" class="article-share-link">Share</a>
       
       
       
@@ -448,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/09/30/MongoDB-build/" data-id="ckua5s6ln0014s9gtb5az5hs5" data-title="MongoDB在Windows环境下部署" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/09/30/MongoDB-build/" data-id="ckuao3eva0014ilgtd5fd1wql" data-title="MongoDB在Windows环境下部署" class="article-share-link">Share</a>
       
       
       
@@ -493,7 +440,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/09/30/Hadoop-build/" data-id="ckua5s6ll000ys9gthercg1pt" data-title="部署Hadoop集群" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/09/30/Hadoop-build/" data-id="ckuao3ev8000yilgte61hfj3o" data-title="部署Hadoop集群" class="article-share-link">Share</a>
       
       
       
@@ -540,7 +487,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/07/17/Extract-NianShaoHuangTang/" data-id="ckua5s6lj000rs9gt41rl2k4m" data-title="摘阅：《年少荒唐》 - 朱炫" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/07/17/Extract-NianShaoHuangTang/" data-id="ckuao3ev5000pilgt74evdwau" data-title="摘阅：《年少荒唐》 - 朱炫" class="article-share-link">Share</a>
       
       
       
@@ -597,7 +544,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/07/16/Kubernetes-install/" data-id="ckua5s6m9003rs9gtg0e3fdm4" data-title="Kubernetes安装部署" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/07/16/Kubernetes-install/" data-id="ckuao3evx003qilgthlaw967g" data-title="Kubernetes安装部署" class="article-share-link">Share</a>
       
       
       
@@ -643,7 +590,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/07/11/Kubernetes_DOC/" data-id="ckua5s6m6003bs9gt3cbh13zs" data-title="Kubernetes初识" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/07/11/Kubernetes_DOC/" data-id="ckuao3evv003ailgth3w35z0u" data-title="Kubernetes初识" class="article-share-link">Share</a>
       
       
       
@@ -696,11 +643,57 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2019/06/01/ApolloBuild/" data-id="ckua5s6m50038s9gt05684gb2" data-title="搭建携程Apollo分布式配置中心" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2019/06/01/ApolloBuild/" data-id="ckuao3evt0037ilgt0ghi09kb" data-title="搭建携程Apollo分布式配置中心" class="article-share-link">Share</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apollo/" rel="tag">Apollo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Help/" rel="tag">Help</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-EurekaHighAvailability" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/05/26/EurekaHighAvailability/" class="article-date">
+  <time class="dt-published" datetime="2019-05-26T01:23:25.000Z" itemprop="datePublished">2019-05-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2019/05/26/EurekaHighAvailability/">实现Eureka注册发现的高可用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>spring-cloud为基础的微服务架构，所有的微服务都需要注册到注册中心，如果这个注册中心阻塞或者宕机，那么整个系统都将无法继续正常提供服务，所以，这里就需要对注册中心进行集群部署，换言之，实现高可用。</p>
+<p>实现的高可用的思想是：通过集群部署Eureka，并使Eureka之间相互注册，这样，当其中一台Eureka宕机不可用时，此时仍有一台服务注册可用。</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/05/26/EurekaHighAvailability/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/05/26/EurekaHighAvailability/" data-id="ckuao3ev7000tilgt4fyobuxs" data-title="实现Eureka注册发现的高可用" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Eureka/" rel="tag">Eureka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Cloud/" rel="tag">Spring Cloud</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li></ul>
 
     </footer>
   </div>
@@ -747,7 +740,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li></ul>
     </div>
   </div>
 
@@ -764,10 +757,6 @@
           </li>
         
           <li>
-            <a href="/2021/02/09/toYMJ/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2020/12/31/2020Report/">(no title)</a>
           </li>
         
@@ -777,6 +766,10 @@
         
           <li>
             <a href="/2020/10/01/LogMonitor/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/07/K8s_client/">(no title)</a>
           </li>
         
       </ul>
